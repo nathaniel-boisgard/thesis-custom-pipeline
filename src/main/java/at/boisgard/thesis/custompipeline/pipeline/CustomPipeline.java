@@ -5,53 +5,35 @@
  */
 package at.boisgard.thesis.custompipeline.pipeline;
 
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.util.CoreMap;
-import java.util.Properties;
+import at.boisgard.thesis.custompipeline.pipeline.service.CoreNLPService;
+import at.boisgard.thesis.custompipeline.pipeline.service.Word2VecService;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+
 
 /**
  *
  * @author BUERO
  */
-@Component
 public class CustomPipeline {
     
     public static final Logger LOGGER = LoggerFactory.getLogger(CustomPipeline.class);
     
-    public CustomPipeline(){
+    public CoreNLPService coreNLPService;
+    public Word2VecService word2VecService;
+    
+    public CustomPipeline(CoreNLPService coreNLPService, Word2VecService word2VecService) throws URISyntaxException, IOException{
         
-        Properties props = new Properties();
-        props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,depparse");
-        props.setProperty("ner.model", "C:\\Users\\BUERO\\java\\coreNLP\\ner-model.sport.en.ser.gz");
+        this.coreNLPService = coreNLPService;
+        this.word2VecService = word2VecService;
         
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        LOGGER.info("Starting pipeline with {}, {}",coreNLPService,word2VecService);     
+    }
+    
+    public void testPipeline(String input) throws URISyntaxException, IOException{
         
-        String input = "When is the next match between Chelsea FC and Manchester United?";
-        
-        Annotation document = new Annotation(input);
-        
-        pipeline.annotate(document);
-        
-        
-        
-        for(CoreMap sentence: document.get(CoreAnnotations.SentencesAnnotation.class)){
-            
-            for(CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)){
-                
-                String word = token.get(CoreAnnotations.TextAnnotation.class);
-                String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-                String ner = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
-                String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
-                
-                LOGGER.info("{}: {},{},{}",word,lemma,pos,ner);
-                
-            }
-        }
+        LOGGER.info("Parsing sentence {}, results: {}",input,word2VecService.annotate(coreNLPService.annotate(input)));
     }
 }

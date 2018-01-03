@@ -5,9 +5,16 @@
  */
 package at.boisgard.thesis.custompipeline;
 
+import at.boisgard.thesis.custompipeline.pipeline.CustomPipeline;
+import at.boisgard.thesis.custompipeline.pipeline.service.CoreNLPService;
+import at.boisgard.thesis.custompipeline.pipeline.service.Word2VecService;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +29,29 @@ public class Application {
     
     public static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
     
+    @Autowired
+    public CoreNLPService coreNLPService;
+    
+    @Autowired
+    public Word2VecService word2VecService;
+    
+    @PostConstruct
+    public void runPipeline(){
+        
+        CustomPipeline customPipeline;
+        try {
+            
+            customPipeline = new CustomPipeline(coreNLPService, word2VecService);
+            customPipeline.testPipeline("When is the next match of Austria Vienna?");
+        } catch (URISyntaxException | IOException ex) {
+            LOGGER.error("Unable to execute pipeline", ex);
+        }
+        
+    }
+    
     public static void main(String[] args){
         
         SpringApplication.run(Application.class, args).close();
     }
+    
 }
