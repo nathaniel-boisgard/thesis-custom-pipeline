@@ -22,12 +22,6 @@ public class Application {
     
     public static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
     
-    @PostConstruct
-    public void doThis(){
-        
-        LOGGER.info("HELLO");
-    }
-    
     public static void main(String[] args){
         
         SpringApplication.run(Application.class, args).close();

@@ -28,6 +28,7 @@ public class CustomPipeline {
         
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,depparse");
+        props.setProperty("ner.model", "C:\\Users\\BUERO\\java\\coreNLP\\ner-model.sport.en.ser.gz");
         
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
         
