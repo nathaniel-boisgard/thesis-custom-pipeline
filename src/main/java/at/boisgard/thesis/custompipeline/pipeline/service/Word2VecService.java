@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -46,15 +47,15 @@ public class Word2VecService {
         this.port = port;        
     }
     
-    public HashMap<CoreLabel,String> annotate(Annotation document) throws URISyntaxException, IOException{
+    public HashMap<CoreLabel,ArrayList<Double>> annotate(Annotation document) throws URISyntaxException, IOException{
         
-        HashMap<CoreLabel,String> results = new HashMap<>();       
+        HashMap<CoreLabel,ArrayList<Double>> results = new HashMap<>();       
         
         for(CoreLabel token: document.get(CoreAnnotations.TokensAnnotation.class)){
             
             String word = token.get(CoreAnnotations.TextAnnotation.class);
             
-            String wordVector = getWordVector(word);
+            ArrayList<Double> wordVector = getWordVector(word);
             
             results.put(token, wordVector);
         }
@@ -62,13 +63,36 @@ public class Word2VecService {
         return results;
     }
     
-    public String getWordVector(String word) throws URISyntaxException, IOException{
+    public ArrayList<Double> getWordVector(String word) throws URISyntaxException, IOException{
                 
         HttpGet getRequest = new HttpGet(createRequestURI(word));
         
         String response = parseHTTPResponse(httpClient.execute(getRequest));
         
-        return response;
+        ArrayList<Double> responseVector = convertStringResponseToVector(response);
+        
+        return responseVector;
+    }
+    
+    public ArrayList<Double> convertStringResponseToVector(String stringResponse){
+        
+        stringResponse = stringResponse.replaceAll("(\\[\\s*)","").replaceAll("(\\s*\\])", "").replaceAll("(\\s{2,})", " ");
+            
+        ArrayList<Double> result = new ArrayList<>();
+        
+        if(stringResponse.equals("")){
+            
+            return result;
+        }
+        
+        String[] stringResponseParts = stringResponse.split(" ");
+        
+        for(String s: stringResponseParts){
+            
+            result.add(Double.parseDouble(s));
+        }
+        
+        return result;
     }
     
     public URI createRequestURI(String word) throws URISyntaxException{
