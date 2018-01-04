@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -36,6 +35,14 @@ public class Word2VecService {
     
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     
+    /**
+     * Provides access to a custom word2vec webservice running at [host]:[port]
+     * For details on the service see: 
+     * https://github.com/nathaniel-boisgard/thesis-word2vec-wrapper
+     * 
+     * @param host
+     * @param port 
+     */
     public Word2VecService(
         @Value("${word2vec.host:'localhost'}") String host,
         @Value("${@word2vec.port:5000}") int port 
@@ -47,6 +54,14 @@ public class Word2VecService {
         this.port = port;        
     }
     
+    /**
+     * To properly connect with Sanford CoreNLP merge the annotations
+     * 
+     * @param document
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException 
+     */
     public HashMap<CoreLabel,ArrayList<Double>> annotate(Annotation document) throws URISyntaxException, IOException{
         
         HashMap<CoreLabel,ArrayList<Double>> results = new HashMap<>();       
@@ -63,6 +78,15 @@ public class Word2VecService {
         return results;
     }
     
+    /**
+     * Returns an ArrayList of Double values representing the 
+     * word2vector vector of a given word
+     * 
+     * @param word
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException 
+     */
     public ArrayList<Double> getWordVector(String word) throws URISyntaxException, IOException{
                 
         HttpGet getRequest = new HttpGet(createRequestURI(word));
@@ -74,6 +98,13 @@ public class Word2VecService {
         return responseVector;
     }
     
+    /**
+     * Convert the String representation returned from the word2vec webservice
+     * to a proper vector format
+     * 
+     * @param stringResponse
+     * @return 
+     */
     public ArrayList<Double> convertStringResponseToVector(String stringResponse){
         
         stringResponse = stringResponse.replaceAll("(\\[\\s*)","").replaceAll("(\\s*\\])", "").replaceAll("(\\s{2,})", " ");
@@ -95,6 +126,13 @@ public class Word2VecService {
         return result;
     }
     
+    /**
+     * Build a proper URI to request the webservice
+     * 
+     * @param word
+     * @return
+     * @throws URISyntaxException 
+     */
     public URI createRequestURI(String word) throws URISyntaxException{
         
         URI uri = new URIBuilder().setScheme("http")
@@ -109,6 +147,13 @@ public class Word2VecService {
         return uri;
     }
     
+    /**
+     * Convert the response from the webservice to a usable String
+     * 
+     * @param httpResponse
+     * @return
+     * @throws IOException 
+     */
     public String parseHTTPResponse(HttpResponse httpResponse) throws IOException{
         
         HttpEntity entity = httpResponse.getEntity();
