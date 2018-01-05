@@ -13,4 +13,5 @@ import lombok.Data;
  */
 public @Data class PartOfSpeechAnnotation extends BaseAnnotation{
     
+    public final String posTag;
 }

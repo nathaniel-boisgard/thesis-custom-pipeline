@@ -7,14 +7,16 @@ package at.boisgard.thesis.custompipeline.model;
 
 import at.boisgard.thesis.custompipeline.model.annotation.BaseAnnotation;
 import java.util.HashMap;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  *
  * @author BUERO
  */
+@AllArgsConstructor
 public @Data class AnnotatedWord {
         
-    public String word;
+    public final String word;
     public HashMap<Class<?>,BaseAnnotation> annotations;
 }

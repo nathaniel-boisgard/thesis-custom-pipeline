@@ -13,4 +13,5 @@ import lombok.Data;
  */
 public @Data class DependencyTreeAnnotation extends BaseAnnotation{
     
+    public final boolean isRoot;
 }

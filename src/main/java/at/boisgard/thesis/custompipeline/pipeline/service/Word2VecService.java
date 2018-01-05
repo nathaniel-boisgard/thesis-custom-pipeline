@@ -48,7 +48,7 @@ public class Word2VecService {
         @Value("${@word2vec.port:5000}") int port 
     ){
         
-        LOGGER.info("Initiating Word2Vec service at {}:{}",host,port);
+        LOGGER.debug("Initiating Word2Vec service at {}:{}",host,port);
         
         this.host = host;
         this.port = port;        
@@ -142,7 +142,7 @@ public class Word2VecService {
                 .setParameter("word", word)
                 .build();
         
-        LOGGER.info("Created URI : {}",uri);
+        LOGGER.debug("Created URI : {}",uri);
         
         return uri;
     }

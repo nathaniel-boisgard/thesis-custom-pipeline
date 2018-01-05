@@ -6,13 +6,15 @@
 package at.boisgard.thesis.custompipeline.model;
 
 import java.util.ArrayList;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  *
  * @author BUERO
  */
-public @Data class Sentence {
+@AllArgsConstructor
+public @Data class AnnotatedSentence {
     
     public ArrayList<AnnotatedWord> words;
 }

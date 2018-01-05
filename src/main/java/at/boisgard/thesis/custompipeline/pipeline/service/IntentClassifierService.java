@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.boisgard.thesis.custompipeline.model.annotation;
-
-import lombok.Data;
+package at.boisgard.thesis.custompipeline.pipeline.service;
 
 /**
  *
  * @author BUERO
  */
-public @Data class NamedEntityAnnotation extends BaseAnnotation {
+public class IntentClassifierService {
     
-    public final String entityClass;
 }

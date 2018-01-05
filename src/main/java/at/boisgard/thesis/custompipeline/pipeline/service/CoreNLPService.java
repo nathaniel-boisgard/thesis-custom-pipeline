@@ -28,7 +28,7 @@ public class CoreNLPService {
     
     public CoreNLPService(@Value("${corenlp.properties:'coreNLP-english.properties'}") String propertiesFilename) throws IOException{
         
-        LOGGER.info("Initiating coreNLP service with properties loaded from {}",propertiesFilename);
+        LOGGER.debug("Initiating coreNLP service with properties loaded from {}",propertiesFilename);
         
         Properties props = new Properties();        
         props.load(IOUtils.readerFromString(propertiesFilename));
@@ -38,7 +38,7 @@ public class CoreNLPService {
     
     public Annotation annotate(String input){
         
-        LOGGER.info("Trying to annotate '{}'",input);
+        LOGGER.debug("Trying to annotate '{}'",input);
         
         Annotation document = new Annotation(input);
         pipeline.annotate(document);

@@ -5,15 +5,23 @@
  */
 package at.boisgard.thesis.custompipeline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
  *
  * @author BUERO
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public @Data class Utterance {
     
-    public Sentence sentence;
+    public AnnotatedSentence annotatedSentence;
+    
+    @JsonProperty("text")
+    public String rawText;
+    
+    @JsonProperty
     public String intent;
     
 }

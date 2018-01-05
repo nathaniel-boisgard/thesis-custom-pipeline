@@ -14,5 +14,5 @@ import lombok.Data;
  */
 public @Data class WordVectorAnnotation extends BaseAnnotation{
     
-    public ArrayList<Double> vector;
+    public final ArrayList<Double> vector;
 }
