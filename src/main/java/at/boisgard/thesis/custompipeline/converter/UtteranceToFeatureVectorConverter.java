@@ -207,7 +207,7 @@ public class UtteranceToFeatureVectorConverter {
                         vectors.add(wV);    
                 }else{
                     
-                    LOGGER.info("Word vector of verb '{}' is empty!",w.word);
+                    LOGGER.debug("Word vector of verb '{}' is empty!",w.word);
                 }    
             }
                 

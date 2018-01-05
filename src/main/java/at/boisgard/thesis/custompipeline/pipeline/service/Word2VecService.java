@@ -91,7 +91,21 @@ public class Word2VecService {
                 
         HttpGet getRequest = new HttpGet(createRequestURI(word));
         
-        String response = parseHTTPResponse(httpClient.execute(getRequest));
+        HttpResponse httpResponse = null;
+        int maxTries = 10;
+        
+        while(httpResponse == null && maxTries-- > 0){
+            
+            try {
+                
+                httpResponse = httpClient.execute(getRequest);
+                
+            } catch (Exception e) {
+                LOGGER.error("Could not retrieve answer from Word2Vec remote service ({} tries left)",maxTries,e);
+            }
+        }
+                
+        String response = parseHTTPResponse(httpResponse);
         
         ArrayList<Double> responseVector = convertStringResponseToVector(response);
         
