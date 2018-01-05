@@ -56,14 +56,17 @@ public class Application {
             
             LOGGER.info("Loaded {} Utterance instances",utterances.size());
             
-            // TRY CREATING ARFF FILE
-            // smallest wV, biggest wV, average wV, dependency tree root wV, average verb wV, average wV of first 3 words, number of B-TEAM NEs, number of B-PLAY NEs, number of B-COMP NEs, intent
+            // CREATE ARFF FILE
+            // smallest wV, biggest wV, average wV, dependency tree root wV, 
+            // average verb wV, average wV of first 3 words, number of B-TEAM NEs, 
+            // number of B-PLAY NEs, number of B-COMP NEs, intent
 
+            
+            // VECTOR FEATURES
             String[] vectorFeatures = {"smallest_wv","biggest_wv","avg_wv","dep_root_wv","avg_vb_wv","avg_n3_wv"};
 
             ArrayList<String> attributes = new ArrayList<>();
             HashMap<String,String> attributeTypes = new HashMap<>();
-
 
             // WE KNOW wV HAVE 300 DIM
             for(String name: vectorFeatures){
@@ -102,9 +105,7 @@ public class Application {
             intentAttributeBuilder.append("}");
             attributeTypes.put("intent", intentAttributeBuilder.toString());
             
-            ARFFGenerator aRFFGenerator = new ARFFGenerator("thesis_en");
-            aRFFGenerator.attributes = attributes;
-            aRFFGenerator.attributeTypes = attributeTypes;
+            ARFFGenerator aRFFGenerator = new ARFFGenerator("thesis_en",attributes,attributeTypes,"C:\\Users\\BUERO\\Dropbox\\test.arff");
             
             LOGGER.info("Converting Utterances to feature vectors");
             for(Utterance u: utterances){
@@ -212,7 +213,7 @@ public class Application {
                 instanceData.add(u.intent);
         
                 LOGGER.info("Adding feature vector to ARFF file");
-                aRFFGenerator.data.add(instanceData);
+                aRFFGenerator.streamInstanceToFile(instanceData);
                 
                 LOGGER.debug("Text: '{}', Intent: '{}'",u.getRawText(),u.getIntent());
                 LOGGER.debug("Smallest word vector (d={}): {} ",fC.getSmallestOrBiggestVector(true).size(),fC.getSmallestOrBiggestVector(true));
@@ -224,8 +225,8 @@ public class Application {
                 LOGGER.debug("NER distribution: {}",fC.getNamedEntitiesDistribution());
             }
             
-            LOGGER.info("Saving Weka ARFF file");
-            aRFFGenerator.saveFile("C:\\Users\\BUERO\\Dropbox\\test.arff");
+            LOGGER.info("Close ARFF file");
+            aRFFGenerator.closeStreamingWriter();
                 
         } catch (URISyntaxException | IOException ex) {
             LOGGER.error("Unable to execute pipeline", ex);

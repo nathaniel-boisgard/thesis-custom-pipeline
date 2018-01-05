@@ -5,6 +5,8 @@
  */
 package at.boisgard.thesis.custompipeline.weka;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,9 +23,34 @@ public class ARFFGenerator {
     public HashMap<String,String> attributeTypes;
     public ArrayList<ArrayList<String>> data = new ArrayList<>(); 
     
+    private PrintWriter streamingWriter;
+    
     public ARFFGenerator(String relation){
         
         this.relation = relation;
+    }
+    
+    public ARFFGenerator(String relation, ArrayList<String> attributes, HashMap<String,String> attributeTypes, String filePath){
+        
+        this.relation = relation;
+        this.attributes = attributes;
+        this.attributeTypes = attributeTypes;
+        
+        try(FileWriter fW = new FileWriter(filePath)){
+            
+            BufferedWriter bW = new BufferedWriter(fW);
+            this.streamingWriter = new PrintWriter(bW);
+        }catch(IOException e){}
+        
+        this.streamingWriter.print(renderHeader());
+    }
+    
+    public void closeStreamingWriter(){
+        
+        if(this.streamingWriter != null){
+            
+            this.streamingWriter.close();
+        }
     }
     
     public String renderHeader(){
@@ -42,6 +69,24 @@ public class ARFFGenerator {
         sB.append("\n").append("@DATA\n");
 
         return sB.toString();
+    }
+    
+    public void streamInstanceToFile(ArrayList<String> instance){
+        
+        StringBuilder sB = new StringBuilder();
+        
+        for(String value: instance){
+                
+            sB.append(value);
+
+            if(instance.indexOf(value)<(instance.size()-1)){
+                sB.append(",");
+            }
+        }
+            
+        sB.append("\n");
+        
+        streamingWriter.print(sB.toString());
     }
     
     public String renderBody(){
