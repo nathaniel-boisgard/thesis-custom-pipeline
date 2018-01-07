@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import at.boisgard.thesis.custompipeline.model.Utterance;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -22,25 +23,32 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class UtteranceProvider {
     
-    public String filePath;
+    public String trainingFilePath;
+    public String testFilePath;
     
     public ObjectMapper oM = new ObjectMapper();
     
-    public UtteranceProvider(@Value("${utterance.training.file.path:'FAIL'}") String filePath){
+    public UtteranceProvider(
+            @Value("${utterance.training.file.path:'FAIL'}") String trainingFilePath,
+            @Value("${utterance.training.file.path:'FAIL'}") String testFilePath){
         
-        this.filePath = filePath;
+        this.trainingFilePath = trainingFilePath;
+        this.testFilePath = testFilePath;
     }
     
-    public ArrayList<Utterance> getUtterances() throws IOException{
+    public ArrayList<Utterance> getTrainingUtterances() throws IOException{
         
-        ArrayList<Utterance> trainingData = oM.readValue(new InputStreamReader(new FileInputStream(filePath),StandardCharsets.UTF_8), oM.getTypeFactory().constructCollectionType(ArrayList.class,Utterance.class));
-        
-        return trainingData;
+        return getUtterances(trainingFilePath);
     }
     
-    public ArrayList<Utterance> getLimitedSetOfUtterances(double ratio) throws IOException{
+    public ArrayList<Utterance> getTestUtterances() throws IOException{
         
-        ArrayList<Utterance> allData = getUtterances();
+        return getUtterances(testFilePath);
+    }
+    
+    public ArrayList<Utterance> getLimitedSetOfTrainingUtterances(double ratio) throws IOException{
+        
+        ArrayList<Utterance> allData = getTrainingUtterances();
         
         ArrayList<Utterance> limitedData = new ArrayList<>();
         
@@ -51,7 +59,19 @@ public class UtteranceProvider {
             }
         }
         
-        return limitedData;
+        return limitedData;        
+    }
+    
+    public ArrayList<Utterance> getUtterances(String filePath) throws IOException{
         
+        ArrayList<Utterance> data = oM.readValue(
+                new InputStreamReader(
+                    new FileInputStream(filePath),
+                    StandardCharsets.UTF_8
+                ), 
+                oM.getTypeFactory().constructCollectionType(ArrayList.class,Utterance.class)
+        );
+        
+        return data;
     }
 }

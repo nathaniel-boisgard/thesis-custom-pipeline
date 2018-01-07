@@ -19,7 +19,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
-import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -103,7 +102,8 @@ public class CustomPipeline {
             // ADD WORD VECTOR
             try {            
                 
-                annotatedWord.annotations.put(WordVectorAnnotation.class, new WordVectorAnnotation(word2VecService.getWordVector(word)));
+                // FOR SOME MODELS, WE NEED TO CONVERT WORD TO LOWERCASE (GERMAN WIKI MODEL)
+                annotatedWord.annotations.put(WordVectorAnnotation.class, new WordVectorAnnotation(word2VecService.getWordVector(word.toLowerCase())));
             }catch (URISyntaxException | IOException ex) {
                 LOGGER.error("Could not add word vector!", ex);
             }

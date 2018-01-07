@@ -40,7 +40,10 @@ public class ARFFGenerator {
             
             BufferedWriter bW = new BufferedWriter(fW);
             this.streamingWriter = new PrintWriter(bW);
-        }catch(IOException e){}
+        }catch(IOException e){
+            
+            System.err.println(e.toString());
+        }
         
         this.streamingWriter.print(renderHeader());
     }

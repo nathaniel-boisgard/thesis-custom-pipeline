@@ -34,6 +34,8 @@ public class UtteranceToFeatureVectorConverter {
     public AnnotatedSentence annotatedSentence;
     public String intent;
     
+    public HashMap<String,Integer> vocabulary;
+    
     public UtteranceToFeatureVectorConverter(Utterance utterance){
         
         this.annotatedSentence = utterance.annotatedSentence;
