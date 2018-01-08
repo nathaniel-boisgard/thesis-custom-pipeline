@@ -18,6 +18,9 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @PropertySource("classpath:services.properties")
 public class ApplicationConfiguration {
     
+    public static final int APPLICATION_TRAINING_ENV = 1;
+    public static final int APPLICATION_TEST_ENV = 2;
+    
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer(){
         

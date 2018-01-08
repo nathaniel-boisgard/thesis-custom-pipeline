@@ -30,7 +30,7 @@ public class UtteranceProvider {
     
     public UtteranceProvider(
             @Value("${utterance.training.file.path:'FAIL'}") String trainingFilePath,
-            @Value("${utterance.training.file.path:'FAIL'}") String testFilePath){
+            @Value("${utterance.test.file.path:'FAIL'}") String testFilePath){
         
         this.trainingFilePath = trainingFilePath;
         this.testFilePath = testFilePath;

@@ -53,21 +53,38 @@ public class Application {
     @Value("${arff.output.file.path:'aux.output.arff'}")
     public String outputFilePath;
     
+    @Value("${app.env:1}")
+    public int appEnvironment; 
+    
     @PostConstruct
     public void runPipeline(){
        
         try {
             
             LOGGER.info("Preparing ARFF file {}",outputFilePath);            
+            ArrayList<Utterance> utterances = new ArrayList<>();
             
-            ArrayList<Utterance> utterances = utteranceProvider.getTrainingUtterances();
+            if(appEnvironment == ApplicationConfiguration.APPLICATION_TRAINING_ENV){
+                
+                utterances = utteranceProvider.getTrainingUtterances();
+            }else{
+                
+                utterances = utteranceProvider.getTestUtterances();
+            }
+                
             CustomPipeline customPipeline = new CustomPipeline(coreNLPService, word2VecService);
             
             LOGGER.info("Loaded {} Utterance instances",utterances.size());
             
-            // TRY CREATING ARFF FILE
-            // smallest wV, biggest wV, average wV, dependency tree root wV, average verb wV, average wV of first 3 words, tf-idf weighed BoW vector, number of B-TEAM NEs, number of B-PLAY NEs, number of B-COMP NEs, intent
-
+            /** 
+             * TRY CREATING ARFF FILE
+             * 
+             * smallest wV, biggest wV, average wV, dependency tree root wV, 
+             * average verb wV, average wV of first 3 words, tf-idf weighed BoW vector, 
+             * number of B-TEAM NEs, number of B-PLAY NEs, number of B-COMP NEs, 
+             * intent
+             *  
+             */
             String[] vectorFeatures = {"smallest_wv","biggest_wv","avg_wv","dep_root_wv","avg_vb_wv","avg_n3_wv"};
 
             ArrayList<String> attributes = new ArrayList<>();
