@@ -50,7 +50,7 @@ public class Application {
     @Autowired
     public UtteranceProvider utteranceProvider;
     
-    @Value("${arff.training.file.path:}")
+    @Value("${arff.output.file.path:'aux.output.arff'}")
     public String outputFilePath;
     
     @PostConstruct
