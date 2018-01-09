@@ -58,6 +58,8 @@ public class DataGenerator {
     public Word2VecService word2VecService;
     
     public String outputFilePath;
+    public String trainingOutputFileName;
+    public String testOutputFileName;
     
     public String language; 
     
@@ -89,6 +91,9 @@ public class DataGenerator {
         customPipeline = new CustomPipeline(coreNLPService, word2VecService);
         LOGGER.info("Initialized CustomPipeline");
         
+        initFileNames();
+        LOGGER.info("Initiated filenames for use in model generation etc");
+        
         initDataHead();
         LOGGER.info("Initialized data head, using {} feature attributes",attributes.size());
         
@@ -98,6 +103,12 @@ public class DataGenerator {
         arffGenerator.attributeTypes = attributeTypes;
         LOGGER.info("Initialized ARFF Generarator to create files for model '{}'",modelName);
 
+    }
+    
+    public void initFileNames(){
+        
+        this.trainingOutputFileName = generateOutputFileName("training");
+        this.testOutputFileName = generateOutputFileName("test");
     }
     
     public void generate(){
@@ -110,7 +121,7 @@ public class DataGenerator {
     
     public void generatedDataFileFromUtterances(ArrayList<Utterance> utterances,String environment){
         
-        String fileName = String.format("%s/%s_%s.arff",outputFilePath,modelName,environment);
+        String fileName = generateOutputFileName(environment);
         LOGGER.info("Preparing ARFF data to save to '{}'",fileName);
         
         ArrayList<ArrayList<String>> arffData = new ArrayList<>();
@@ -121,6 +132,11 @@ public class DataGenerator {
         
         arffGenerator.data = arffData;
         arffGenerator.saveFile(fileName);
+    }
+    
+    public String generateOutputFileName(String env){
+        
+        return String.format("%s/%s_%s.arff",outputFilePath,modelName,env);
     }
     
     public ArrayList<String> convertUtteranceToInstance(Utterance u){

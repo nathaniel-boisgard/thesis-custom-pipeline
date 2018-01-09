@@ -55,7 +55,7 @@ public class Application {
             dataGenerator.generate();
         }            
         
-        ModelGenerator modelGenerator = new ModelGenerator(dataGenerator.utteranceProvider.trainingFilePath, dataGenerator.utteranceProvider.testFilePath);
+        ModelGenerator modelGenerator = new ModelGenerator(dataGenerator.trainingOutputFileName, dataGenerator.testOutputFileName);
         modelGenerator.createAndEvaluateModels();
     }
     
