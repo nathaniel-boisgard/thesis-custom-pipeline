@@ -10,6 +10,7 @@ import at.boisgard.thesis.custompipeline.pipeline.service.CoreNLPService;
 import at.boisgard.thesis.custompipeline.pipeline.service.Word2VecService;
 import at.boisgard.thesis.custompipeline.pipeline.service.BagOfWordsVectorService;
 import at.boisgard.thesis.custompipeline.provider.UtteranceProvider;
+import at.boisgard.thesis.custompipeline.weka.ModelGenerator;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +44,19 @@ public class Application {
     
     @Autowired
     public DataGenerator dataGenerator;
+    
+    @Value("${only.model:0}")
+    public int onlyModel;
         
     @PostConstruct
     public void runPipeline(){
-       
-        dataGenerator.generate();
-  
+        
+        if(onlyModel==0){
+            dataGenerator.generate();
+        }            
+        
+        ModelGenerator modelGenerator = new ModelGenerator(dataGenerator.utteranceProvider.trainingFilePath, dataGenerator.utteranceProvider.testFilePath);
+        modelGenerator.createAndEvaluateModels();
     }
     
    
