@@ -58,8 +58,6 @@ public class DataGenerator {
     public Word2VecService word2VecService;
     
     public String outputFilePath;
-    public String trainingOutputFileName;
-    public String testOutputFileName;
     
     public String language; 
     
@@ -90,10 +88,7 @@ public class DataGenerator {
         
         customPipeline = new CustomPipeline(coreNLPService, word2VecService);
         LOGGER.info("Initialized CustomPipeline");
-        
-        initFileNames();
-        LOGGER.info("Initiated filenames for use in model generation etc");
-        
+  
         initDataHead();
         LOGGER.info("Initialized data head, using {} feature attributes",attributes.size());
         
@@ -101,14 +96,7 @@ public class DataGenerator {
         arffGenerator = new ARFFGenerator(modelName);
         arffGenerator.attributes = attributes;
         arffGenerator.attributeTypes = attributeTypes;
-        LOGGER.info("Initialized ARFF Generarator to create files for model '{}'",modelName);
-
-    }
-    
-    public void initFileNames(){
-        
-        this.trainingOutputFileName = generateOutputFileName("training");
-        this.testOutputFileName = generateOutputFileName("test");
+        LOGGER.info("Initialized ARFF Generarator to create files for model '{}'",modelName); 
     }
     
     public void generate(){
