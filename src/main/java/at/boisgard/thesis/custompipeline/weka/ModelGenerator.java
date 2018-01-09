@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.functions.supportVector.PolyKernel;
+import weka.classifiers.functions.supportVector.RBFKernel;
 import weka.core.Instances;
 import weka.core.Utils;
 
@@ -61,70 +62,50 @@ public class ModelGenerator {
     public void createAndEvaluateModels(){
         
         try {
-            PolyKernel kernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
-
+            
+            // NEED TO MANUALLY INIT ALGORITHM AND KERNELS
+            PolyKernel polyKernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
+            RBFKernel rbfKernel = new RBFKernel(trainingInstances, 250007, 0.01);
+            
             model = new SMO();
-            model.setC(1);
             model.setBatchSize("100");
             model.setChecksTurnedOff(true);
             model.setEpsilon(1.0E-12);
-            model.setKernel(kernel);
-
-            model.buildClassifier(trainingInstances);
-
-            evaluation = new Evaluation(testInstances);
-            evaluation.evaluateModel(model, testInstances);        
-
-            LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
+            
+            double[] cValues = {0.01,0.1,1,10,100};
+            
+            for(double d:cValues){
+            
+                model.setC(d);
+                // POLY AND THEN RBF
+                
+                
+                LOGGER.info("Building model with C={} and Kernel=PolyKernel",d);
+                model.setKernel(polyKernel);
+                model.buildClassifier(trainingInstances);
+                
+                evaluateModel();
+                
+                LOGGER.info("Building model with C={} and Kernel=RBFKernel",d);
+                model.setKernel(rbfKernel);
+                model.buildClassifier(trainingInstances);
+                
+                evaluateModel();
+            }
+             
         } catch (Exception e) {
             LOGGER.error("Error!",e);
         }
             
-        /**    
-        String[] modelDerivations = {
-            "-C 0.01 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K 'weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0'",
-            "-C 0.1 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
-            "-C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
-            "-C 10.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
-            "-C 100.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
-            "-C 0.01 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.RBFKernel -G 0.01 -C 250007\"",
-            "-C 0.1 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.RBFKernel -G 0.01 -C 250007\"",
-            "-C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.RBFKernel -G 0.01 -C 250007\"",
-            "-C 10.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.RBFKernel -G 0.01 -C 250007\"",
-            "-C 100.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.RBFKernel -G 0.01 -C 250007\""
-        };
-        
-        for(String derivation: modelDerivations){
-            
-            try {
-                
-                LOGGER.info("Attemting to build SVM Model derivation '{}'",derivation);
-                
-                createSVMModel(derivation);
-                evaluateModel();
-                
-                LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
-                
-            } catch (Exception e) {
-                
-                LOGGER.error("Could not train and evaluate model!",e);
-            }
-        }*/
     }
-    
-    public void createSVMModel(String optionString) throws Exception{
-        
-        model = new SMO();
-        String[] options = Utils.splitOptions(optionString);
-
-        model.setOptions(options);
-        model.buildClassifier(trainingInstances);   
-    }
-    
+  
     public void evaluateModel() throws Exception{
         
         evaluation = new Evaluation(testInstances);
-        evaluation.evaluateModel(model, testInstances);
+        evaluation.evaluateModel(model, testInstances); 
+
+        LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
+        LOGGER.info(evaluation.toMatrixString("\nConfusion Matrix\n======\n"));
     }
     
 }
