@@ -8,13 +8,13 @@ package at.boisgard.thesis.custompipeline.weka;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import org.slf4j.LoggerFactory;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.functions.supportVector.PolyKernel;
 import weka.classifiers.functions.supportVector.RBFKernel;
 import weka.core.Instances;
-import weka.core.Utils;
 
 /**
  *
@@ -32,11 +32,16 @@ public class ModelGenerator {
     public SMO model;
     
     public Evaluation evaluation;
+    public String evaluationFileName;
     
-    public ModelGenerator(String trainingFileName, String testFileName){
+    PrintWriter pW;
+    
+    public ModelGenerator(String trainingFileName, String testFileName, String evaluationFileName){
         
         this.trainingFileName = trainingFileName;
         this.testFileName = testFileName;
+        
+        this.evaluationFileName = evaluationFileName;
         
         LOGGER.info("Training and evaluating models on {} and {}",trainingFileName,testFileName);
         
@@ -54,6 +59,8 @@ public class ModelGenerator {
             testInstances.setClassIndex(testInstances.numAttributes()-1);
             
             LOGGER.info("Loaded training and test instances for model creation and evaluation");
+            
+            PrintWriter pW = new PrintWriter(evaluationFileName);
         } catch (IOException ex) {
             LOGGER.error("Could not load ARFF file", ex);
         }
@@ -96,6 +103,8 @@ public class ModelGenerator {
         } catch (Exception e) {
             LOGGER.error("Error!",e);
         }
+        
+        closeWriter();
             
     }
   
@@ -106,6 +115,19 @@ public class ModelGenerator {
 
         LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
         LOGGER.info(evaluation.toMatrixString("\nConfusion Matrix\n======\n"));
+        
+        saveEvaluationToFile();
     }
     
+    public void saveEvaluationToFile() throws Exception{
+         
+        pW.println(String.format("\nMODEL\n======\nKernel: %s, C: %.3f",model.getKernel().getClass().getName(),model.getC()));
+        pW.println(evaluation.toSummaryString("\nResults\n======\n", false));
+        pW.println(evaluation.toMatrixString("\nConfusion Matrix\n======\n"));
+    }
+    
+    public void closeWriter(){
+        
+        pW.close();
+    }
 }

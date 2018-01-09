@@ -61,13 +61,16 @@ public class DataGenerator {
     
     public String language; 
     
+    public String w2vModelName;
+    
     public DataGenerator(
             UtteranceProvider utteranceProvider,
             CoreNLPService coreNLPService,
             BagOfWordsVectorService bagOfWordsVectorService,
             Word2VecService word2VecService,
             @Value("${arff.output.file.path:'/tmp'}") String outputFilePath,
-            @Value("${language:'en'}") String language
+            @Value("${language:'en'}") String language,
+            @Value("${w2v.model.name:'unknown-w2v'}") String w2vModelName
     ) throws IOException, URISyntaxException{
         
         this.utteranceProvider = utteranceProvider;
@@ -77,6 +80,7 @@ public class DataGenerator {
         
         this.outputFilePath = outputFilePath;
         this.language = language;
+        this.w2vModelName = w2vModelName;
         
         trainingUtterances = utteranceProvider.getTrainingUtterances();
         testUtterances = utteranceProvider.getTestUtterances();
@@ -92,7 +96,7 @@ public class DataGenerator {
         initDataHead();
         LOGGER.info("Initialized data head, using {} feature attributes",attributes.size());
         
-        modelName = String.format("thesis_%s_w2vdim_%d_bowvdim_%d", language,w2vVectorSize,bowVectorSize);
+        modelName = String.format("thesis_%s_w2v_%s_dim_%d_bowvdim_%d", language,w2vModelName,w2vVectorSize,bowVectorSize);
         arffGenerator = new ARFFGenerator(modelName);
         arffGenerator.attributes = attributes;
         arffGenerator.attributeTypes = attributeTypes;

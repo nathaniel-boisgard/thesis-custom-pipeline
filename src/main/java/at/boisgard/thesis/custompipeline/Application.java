@@ -51,15 +51,16 @@ public class Application {
     @PostConstruct
     public void runPipeline(){
         
-        if(onlyModel==0){
+        if(onlyModel!=1){
             dataGenerator.generate();
-        }            
+        }           
         
-        ModelGenerator modelGenerator = new ModelGenerator(dataGenerator.generateOutputFileName("training"), dataGenerator.generateOutputFileName("test"));
+        ModelGenerator modelGenerator = new ModelGenerator(
+                dataGenerator.generateOutputFileName("training"), 
+                dataGenerator.generateOutputFileName("test"), 
+                String.format("%s/%s.eval",dataGenerator.outputFilePath,dataGenerator.modelName));
         modelGenerator.createAndEvaluateModels();
     }
-    
-   
     
     public static void main(String[] args){
         
