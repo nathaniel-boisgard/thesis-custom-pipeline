@@ -58,7 +58,7 @@ public class ModelGenerator {
         }
     }
     
-    public void createAndEvaluateModels() throws Exception{
+    public void createAndEvaluateModels(){
         
         try {
             PolyKernel kernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
