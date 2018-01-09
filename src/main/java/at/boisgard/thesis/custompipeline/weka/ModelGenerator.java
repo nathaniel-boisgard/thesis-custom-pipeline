@@ -36,6 +36,8 @@ public class ModelGenerator {
         this.trainingFileName = trainingFileName;
         this.testFileName = testFileName;
         
+        LOGGER.info("Training and evaluating models on {} and {}",trainingFileName,testFileName);
+        
         try {
             BufferedReader bR = new BufferedReader(new FileReader(trainingFileName));
             trainingInstances = new Instances(bR);
