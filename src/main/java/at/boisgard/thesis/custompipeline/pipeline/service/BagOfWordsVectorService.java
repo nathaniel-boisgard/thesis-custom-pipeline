@@ -142,4 +142,12 @@ public class BagOfWordsVectorService {
         
         return sentence.split(" ");
     }    
+    
+    public int getBoWVectorSize(){
+        
+        Utterance testUtt = new Utterance();
+        testUtt.setRawText("test");
+        
+        return getTfIDFVector(testUtt).size();
+    }
 }

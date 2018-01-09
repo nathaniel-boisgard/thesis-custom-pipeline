@@ -69,7 +69,7 @@ public class CustomPipeline {
     }
     
     public Utterance executePipelineOnUtterance(Utterance utterance){
-        
+
         Instant start = Instant.now();
         
         // EXECUTE CORE NLP

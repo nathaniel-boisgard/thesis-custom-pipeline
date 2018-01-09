@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -182,5 +183,16 @@ public class Word2VecService {
             
             throw new IOException("Got empty response from Word2Vec service!");
         }
+    }
+    
+    public int getWord2VecVectorSize(){
+        
+        try {
+            return getWordVector("test").size();
+        } catch (URISyntaxException | IOException ex) {
+            LOGGER.error("Could not get W2V vector size", ex);
+        }
+        
+        return 0;
     }
 }
