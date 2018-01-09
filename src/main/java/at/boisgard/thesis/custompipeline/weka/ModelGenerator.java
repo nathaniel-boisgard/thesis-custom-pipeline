@@ -60,7 +60,7 @@ public class ModelGenerator {
             
             LOGGER.info("Loaded training and test instances for model creation and evaluation");
             
-            PrintWriter pW = new PrintWriter(evaluationFileName);
+            pW = new PrintWriter(evaluationFileName);
         } catch (IOException ex) {
             LOGGER.error("Could not load ARFF file", ex);
         }
