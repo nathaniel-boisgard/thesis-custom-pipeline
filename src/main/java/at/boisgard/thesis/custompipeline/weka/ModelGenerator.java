@@ -11,6 +11,7 @@ import java.io.IOException;
 import org.slf4j.LoggerFactory;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.functions.supportVector.PolyKernel;
 import weka.core.Instances;
 import weka.core.Utils;
 
@@ -57,10 +58,26 @@ public class ModelGenerator {
         }
     }
     
-    public void createAndEvaluateModels(){
-            
+    public void createAndEvaluateModels() throws Exception{
+        
+        PolyKernel kernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
+        
+        model = new SMO();
+        model.setC(1);
+        model.setBatchSize("100");
+        model.setChecksTurnedOff(true);
+        model.setEpsilon(1.0E-12);
+        model.setKernel(kernel);
+        
+        model.buildClassifier(trainingInstances);
+        
+        evaluation = new Evaluation(testInstances);
+        evaluation.evaluateModel(model, testInstances);        
+        
+        LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
+        /**    
         String[] modelDerivations = {
-            "-C 0.01 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
+            "-C 0.01 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K 'weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0'",
             "-C 0.1 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
             "-C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
             "-C 10.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"",
@@ -87,7 +104,7 @@ public class ModelGenerator {
                 
                 LOGGER.error("Could not train and evaluate model!",e);
             }
-        }
+        }*/
     }
     
     public void createSVMModel(String optionString) throws Exception{
