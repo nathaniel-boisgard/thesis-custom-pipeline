@@ -55,10 +55,20 @@ public class Application {
             dataGenerator.generate();
         }           
         
+        String arffTrainingFile = dataGenerator.generateOutputFileName("training");
+        String arffTestFile = dataGenerator.generateOutputFileName("test");
+        String evaluationOutputFile = String.format("%s/%s.eval",dataGenerator.outputFilePath,dataGenerator.modelName);
+        
+        coreNLPService = null;
+        word2VecService = null;
+        bowVectorSercvice = null;
+        utteranceProvider = null;
+        dataGenerator = null;
+        
         ModelGenerator modelGenerator = new ModelGenerator(
-                dataGenerator.generateOutputFileName("training"), 
-                dataGenerator.generateOutputFileName("test"), 
-                String.format("%s/%s.eval",dataGenerator.outputFilePath,dataGenerator.modelName));
+                arffTrainingFile, 
+                arffTestFile, 
+                evaluationOutputFile);
         modelGenerator.createAndEvaluateModels();
     }
     
