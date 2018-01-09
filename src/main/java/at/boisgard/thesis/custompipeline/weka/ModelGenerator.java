@@ -60,21 +60,26 @@ public class ModelGenerator {
     
     public void createAndEvaluateModels() throws Exception{
         
-        PolyKernel kernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
-        
-        model = new SMO();
-        model.setC(1);
-        model.setBatchSize("100");
-        model.setChecksTurnedOff(true);
-        model.setEpsilon(1.0E-12);
-        model.setKernel(kernel);
-        
-        model.buildClassifier(trainingInstances);
-        
-        evaluation = new Evaluation(testInstances);
-        evaluation.evaluateModel(model, testInstances);        
-        
-        LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
+        try {
+            PolyKernel kernel = new PolyKernel(trainingInstances, 250007,1.0,Boolean.FALSE);
+
+            model = new SMO();
+            model.setC(1);
+            model.setBatchSize("100");
+            model.setChecksTurnedOff(true);
+            model.setEpsilon(1.0E-12);
+            model.setKernel(kernel);
+
+            model.buildClassifier(trainingInstances);
+
+            evaluation = new Evaluation(testInstances);
+            evaluation.evaluateModel(model, testInstances);        
+
+            LOGGER.info(evaluation.toSummaryString("\nResults\n======\n", false));
+        } catch (Exception e) {
+            LOGGER.error("Error!",e);
+        }
+            
         /**    
         String[] modelDerivations = {
             "-C 0.01 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K 'weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0'",
