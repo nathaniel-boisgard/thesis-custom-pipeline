@@ -79,7 +79,7 @@ public class ModelGenerator {
             model.setChecksTurnedOff(true);
             model.setEpsilon(1.0E-12);
             
-            double[] cValues = {0.01,0.1,1,10,100};
+            double[] cValues = {0.1,1,10};
             
             for(double d:cValues){
             
