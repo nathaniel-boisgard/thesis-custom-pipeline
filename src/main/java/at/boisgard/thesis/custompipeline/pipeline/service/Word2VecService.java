@@ -45,7 +45,7 @@ public class Word2VecService {
      */
     public Word2VecService(
         @Value("${word2vec.host:'localhost'}") String host,
-        @Value("${@word2vec.port:5000}") int port 
+        @Value("${word2vec.port:5000}") int port 
     ){
         
         LOGGER.info("Initiating Word2Vec service at {}:{}",host,port);
