@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -49,7 +48,7 @@ public class Word2VecService {
         @Value("${@word2vec.port:5000}") int port 
     ){
         
-        LOGGER.debug("Initiating Word2Vec service at {}:{}",host,port);
+        LOGGER.info("Initiating Word2Vec service at {}:{}",host,port);
         
         this.host = host;
         this.port = port;        

@@ -103,7 +103,7 @@ public class CustomPipeline {
             try {            
                 
                 // FOR SOME MODELS, WE NEED TO CONVERT WORD TO LOWERCASE (GERMAN WIKI MODEL)
-                annotatedWord.annotations.put(WordVectorAnnotation.class, new WordVectorAnnotation(word2VecService.getWordVector(word.toLowerCase())));
+                annotatedWord.annotations.put(WordVectorAnnotation.class, new WordVectorAnnotation(word2VecService.getWordVector(word)));
             }catch (URISyntaxException | IOException ex) {
                 LOGGER.error("Could not add word vector!", ex);
             }

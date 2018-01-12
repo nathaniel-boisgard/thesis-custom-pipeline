@@ -157,9 +157,41 @@ public class DataGenerator {
 
         // NE OCCURENCES
         HashMap<String,Integer> neDistribution = fC.getNamedEntitiesDistribution();
-        instanceData.add(String.format("%d", neDistribution.get("B-TEAM")!=null?neDistribution.get("B-TEAM"):0));
-        instanceData.add(String.format("%d", neDistribution.get("B-PLAY")!=null?neDistribution.get("B-PLAY"):0));
-        instanceData.add(String.format("%d", neDistribution.get("B-COMP")!=null?neDistribution.get("B-COMP"):0));
+        
+        int compNEs = 0;
+        int teamNEs = 0;
+        int playNEs = 0;
+        
+        if(neDistribution.get("B-COMP")!=null){
+            
+            compNEs += neDistribution.get("B-COMP");
+        }
+        if(neDistribution.get("I-COMP")!=null){
+            
+            compNEs += neDistribution.get("I-COMP");
+        }
+        
+        if(neDistribution.get("B-TEAM")!=null){
+            
+            teamNEs += neDistribution.get("B-TEAM");
+        }
+        if(neDistribution.get("I-TEAM")!=null){
+            
+            teamNEs += neDistribution.get("I-TEAM");
+        }
+        
+        if(neDistribution.get("B-PLAY")!=null){
+            
+            playNEs += neDistribution.get("B-PLAY");
+        }
+        if(neDistribution.get("I-PLAY")!=null){
+            
+            playNEs += neDistribution.get("I-PLAY");
+        }
+        
+        instanceData.add(String.format("%d", teamNEs));
+        instanceData.add(String.format("%d", playNEs));
+        instanceData.add(String.format("%d", compNEs));
 
         // INTENT
         instanceData.add(u.intent);        
