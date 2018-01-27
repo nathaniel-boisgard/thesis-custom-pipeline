@@ -26,9 +26,9 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @ComponentScan
 @SpringBootApplication
-public class Application {
+public class TrainingApplication {
     
-    public static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(TrainingApplication.class);
     
     @Autowired
     public CoreNLPService coreNLPService;
@@ -39,18 +39,18 @@ public class Application {
     @Autowired
     public BagOfWordsVectorService bowVectorSercvice;
     
-    @Autowired
-    public UtteranceProvider utteranceProvider;
+    //@Autowired
+    //public UtteranceProvider utteranceProvider;
     
-    @Autowired
-    public DataGenerator dataGenerator;
+    //@Autowired
+    //public DataGenerator dataGenerator;
     
     @Value("${only.model:0}")
     public int onlyModel;
         
     @PostConstruct
     public void runPipeline(){
-        
+        /*
         if(onlyModel!=1){
             dataGenerator.generate();
         }           
@@ -70,11 +70,12 @@ public class Application {
                 arffTestFile, 
                 evaluationOutputFile);
         modelGenerator.createAndEvaluateModels();
+*/
     }
     
     public static void main(String[] args){
         
-        SpringApplication.run(Application.class, args).close();
+        SpringApplication.run(TrainingApplication.class, args).close();
     }
     
 }

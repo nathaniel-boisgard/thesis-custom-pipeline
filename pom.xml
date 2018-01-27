@@ -12,6 +12,22 @@
             <version>1.5.9.RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.5.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>1.5.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>1.5.9.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
@@ -73,7 +89,7 @@
                 <version>1.5.9.RELEASE</version>
                 <configuration>
                   <fork>true</fork>
-                  <mainClass>at.boisgard.thesis.custompipeline.Application</mainClass>
+                  <mainClass>at.boisgard.thesis.custompipeline.TrainingApplication</mainClass>
                 </configuration>
                 <executions>
                   <execution>

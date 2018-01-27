@@ -18,5 +18,7 @@ import lombok.Data;
 public @Data class AnnotatedWord {
         
     public final String word;
+    public int start;
+    public int end;
     public HashMap<Class<?>,BaseAnnotation> annotations;
 }

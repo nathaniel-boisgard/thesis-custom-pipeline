@@ -88,7 +88,7 @@ public class CustomPipeline {
             
             String word = token.get(CoreAnnotations.TextAnnotation.class);
 
-            AnnotatedWord annotatedWord = new AnnotatedWord(word,new HashMap<>());
+            AnnotatedWord annotatedWord = new AnnotatedWord(word,token.beginPosition(),token.endPosition(),new HashMap<>());
 
             // ADD POS TAG            
             annotatedWord.annotations.put(PartOfSpeechAnnotation.class, new PartOfSpeechAnnotation(token.get(CoreAnnotations.PartOfSpeechAnnotation.class)));
@@ -123,4 +123,6 @@ public class CustomPipeline {
         // RETURN ANNOTATED UTTERANCE
         return utterance;
     }
+    
+    
 }

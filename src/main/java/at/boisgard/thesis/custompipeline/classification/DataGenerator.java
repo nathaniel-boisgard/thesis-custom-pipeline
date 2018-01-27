@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
  *
  * @author BUERO
  */
-@Component
 public class DataGenerator {
     
     public static final Logger LOGGER = LoggerFactory.getLogger(DataGenerator.class);
@@ -248,7 +247,7 @@ public class DataGenerator {
         attributeTypes.put("intent", intentAttributeBuilder.toString());
     }
     
-    public void safelyAddVectorToInstanceData(ArrayList<Double> vector, ArrayList<String> instanceData, int dimensions){
+    public static void safelyAddVectorToInstanceData(ArrayList<Double> vector, ArrayList<String> instanceData, int dimensions){
         
         for(int i=0;i<dimensions;i++){
               
