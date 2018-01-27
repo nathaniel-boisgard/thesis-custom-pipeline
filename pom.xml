@@ -89,7 +89,7 @@
                 <version>1.5.9.RELEASE</version>
                 <configuration>
                   <fork>true</fork>
-                  <mainClass>at.boisgard.thesis.custompipeline.TrainingApplication</mainClass>
+                  <mainClass>at.boisgard.thesis.custompipeline.WebServiceApplication</mainClass>
                 </configuration>
                 <executions>
                   <execution>
