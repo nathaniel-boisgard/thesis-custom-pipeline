@@ -10,7 +10,7 @@
         <stanford-core-nlp-version>3.8.0</stanford-core-nlp-version>
         <weka-version>3.8.4</weka-version>
         <lombok-version>1.18.12</lombok-version>
-        <apache-httpcomponents-version>4.5.12</apache-httpcomponents-version>
+        <apache-httpcomponents-version>4.5.13</apache-httpcomponents-version>
         <jackson-version>2.11.0</jackson-version>
         <java-version>1.8</java-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
